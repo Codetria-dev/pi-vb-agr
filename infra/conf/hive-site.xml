@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!-- Hive 3.1.3: metastore em PostgreSQL e warehouse no HDFS. -->
+<configuration>
+  <property>
+    <name>hive.metastore.warehouse.dir</name>
+    <value>hdfs://namenode:9000/lake/warehouse</value>
+  </property>
+  <property>
+    <name>hive.metastore.uris</name>
+    <value>thrift://hive-metastore:9083</value>
+  </property>
+  <!-- Forca bind IPv4: sem isto o Thrift sobe apenas em IPv6 (:::9083) e o
+       HiveServer2/Trino nao conseguem conectar pelo DNS IPv4 do Docker. -->
+  <property>
+    <name>hive.metastore.bind.host</name>
+    <value>0.0.0.0</value>
+  </property>
+  <property>
+    <name>hive.metastore.port</name>
+    <value>9083</value>
+  </property>
+
+  <!-- Conexão do metastore com PostgreSQL -->
+  <property>
+    <name>javax.jdo.option.ConnectionDriverName</name>
+    <value>org.postgresql.Driver</value>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionURL</name>
+    <value>jdbc:postgresql://postgres:5432/metastore</value>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionUserName</name>
+    <value>hive</value>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionPassword</name>
+    <value>hive</value>
+  </property>
+  <property>
+    <name>hive.metastore.schema.verification</name>
+    <value>false</value>
+  </property>
+
+  <!-- HiveServer2 -->
+  <property>
+    <name>hive.server2.enable.doAs</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>hive.server2.thrift.bind.host</name>
+    <value>0.0.0.0</value>
+  </property>
+  <property>
+    <name>hive.server2.thrift.port</name>
+    <value>10000</value>
+  </property>
+  <property>
+    <name>hive.server2.authentication</name>
+    <value>NONE</value>
+  </property>
+
+  <!-- Processamento local (sem YARN): volume pequeno de dados -->
+  <property>
+    <name>hive.execution.engine</name>
+    <value>mr</value>
+  </property>
+  <property>
+    <name>hive.exec.mode.local.auto</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>hive.exec.mode.local.auto.inputbytes.max</name>
+    <value>134217728</value>
+  </property>
+  <property>
+    <name>hive.exec.dynamic.partition</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>hive.exec.dynamic.partition.mode</name>
+    <value>nonstrict</value>
+  </property>
+  <property>
+    <name>hive.stats.autogather</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>hive.metastore.event.db.notification.api.auth</name>
+    <value>false</value>
+  </property>
+</configuration>

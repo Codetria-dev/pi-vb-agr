@@ -1,0 +1,15 @@
+# Credenciais e configuração local
+.env
+infra/.env
+
+# Dados coletados (JSON/CSV não devem ser versionados)
+dados/*
+!dados/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Logs
+*.log
